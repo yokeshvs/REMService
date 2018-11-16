@@ -17,9 +17,9 @@ exports.addMessage = functions.https.onRequest((req, res) => {
 exports.devices = functions.https.onRequest((req, res) => {
     if (req.method === 'POST') {
         const deviceId = req.body.id;
-        return admin.database().ref('/devices').push({ deviceId: deviceId }).then((snapshot) => {
-            return res.status(200).send('Device added successfully');
-        });
+        admin.database().ref('/devices').child(deviceId).set({ timeStamp: admin.database.ServerValue.TIMESTAMP });
+        admin.database().ref('/deviceInfo').child(deviceId).set({ edge1: 0, edge2: 0, edge3: 0 });
+        return res.status(200).send('Device added successfully');
     }
     return res.status(404).send('Request Method Incorrect');
 });
