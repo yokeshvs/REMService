@@ -29,7 +29,8 @@ exports.deviceLocation = functions.https.onRequest((req, res) => {
         const deviceId = req.body.deviceId;
         const edgeId = req.body.edgeId;
         const distance = req.body.distance;
-        admin.database().ref('/devices').child(deviceId).child(edgeId).set({ distance: distance });
+        const time = admin.database.ServerValue.TIMESTAMP;
+        admin.database().ref('/devices').child(deviceId).child(edgeId).set({ distance: distance, deviceId : deviceId, time: time});
         return res.status(200).send('Device location updated successfully');
     }
     return res.status(404).send('Request Method Incorrect');
